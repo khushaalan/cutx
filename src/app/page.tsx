@@ -13,6 +13,30 @@ export default function DotPatternDemo() {
   const [urlID, setUrlID] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isWarning, setIsWarning] = useState(false);
+
+  function isURL(str) {
+    const pattern = new RegExp(
+      "^(https?:\\/\\/)?" +
+        "((([a-zA-Z0-9$-_.+!*'(),]+\\.)+[a-zA-Z]{2,})" +
+        "|((\\d{1,3}\\.){3}\\d{1,3}))" +
+        "(\\:\\d+)?(\\/[-a-zA-Z0-9@:%._+~#=]*)*" +
+        "(\\?[;&a-zA-Z0-9@:%._+~#?&//=]*)?" +
+        "(\\#[-a-zA-Z0-9_]*)?$",
+      "i"
+    );
+    return !!pattern.test(str);
+  }
+
+  function validateInput() {
+    if (isURL(url)) {
+      shortenUrl();
+      setIsWarning(false);
+    } else {
+      setMessage("Please enter a valid URL");
+      setIsWarning(true);
+    }
+  }
 
   async function shortenUrl() {
     setMessage("");
@@ -124,7 +148,7 @@ export default function DotPatternDemo() {
                   placeholder="Enter URL"
                 />
 
-                <ShimmerButton className="shadow-2xl" onClick={shortenUrl}>
+                <ShimmerButton className="shadow-2xl" onClick={validateInput}>
                   <span className="whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-white dark:from-white dark:to-slate-900/10 lg:text-lg">
                     Shorten
                   </span>
@@ -133,11 +157,16 @@ export default function DotPatternDemo() {
 
               {message && loading === false && (
                 <>
-                  <p className="text-center text-lg font-medium tracking-tighter text-green-600 dark:text-white">
+                  <p
+                    className={`text-center text-lg font-medium tracking-tighter dark:text-white ${
+                      isWarning ? "text-red-600" : "text-green-600"
+                    }`}
+                  >
                     {message}
                   </p>
                 </>
               )}
+
               {shortUrl && loading === false && (
                 <>
                   <div onClick={copyUrl}>
