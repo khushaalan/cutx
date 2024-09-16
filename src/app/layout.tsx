@@ -14,8 +14,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "URLShortener",
-  description: "A simple URL shortener",
+  title: "CutX - URL Shortener",
+  description: "A simple URL Shortener",
 };
 
 export default function RootLayout({
